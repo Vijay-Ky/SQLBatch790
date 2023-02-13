@@ -694,6 +694,255 @@ SELECT * FROM PERSON P RIGHT OUTER JOIN MAIL_ACCOUNT M ON P.ID = M.PERSON_ID;
 SELECT * FROM PERSON P FULL OUTER JOIN MAIL_ACCOUNT M ON P.ID = M.PERSON_ID;
 
 
+//MANY TO MANY
+
+DROP TABLE STUDENT CASCADE CONSTRAINTS;
+
+CREATE TABLE STUDENT(ID NUMBER UNIQUE, FIRST_NAME VARCHAR2(90), LAST_NAME VARCHAR2(90)); 
+
+CREATE TABLE SKILL(ID NUMBER UNIQUE, NAME VARCHAR2(90));
+
+INSERT INTO STUDENT VALUES(1, 'RAMU', 'B');
+INSERT INTO STUDENT VALUES(2, 'MANU', 'C');
+INSERT INTO STUDENT VALUES(3, 'MURALI', 'D');
+INSERT INTO STUDENT VALUES(4, 'KUMAR', 'E');
+
+INSERT INTO SKILL VALUES(1, 'C');
+INSERT INTO SKILL VALUES(2, 'C++');
+INSERT INTO SKILL VALUES(3, 'JAVA');
+INSERT INTO SKILL VALUES(4, 'ORACLE');
+
+SELECT * FROM SKILL;
+
+CREATE TABLE STUDENT_SKILL(STUDENT_ID NUMBER, SKILL_ID NUMBER,
+CONSTRAINT SS_FK1 FOREIGN KEY(STUDENT_ID) REFERENCES STUDENT(ID),
+CONSTRAINT SS_FK2 FOREIGN KEY(SKILL_ID) REFERENCES SKILL(ID));
+
+INSERT INTO STUDENT_SKILL VALUES(1, 1);
+INSERT INTO STUDENT_SKILL VALUES(1, 2);
+INSERT INTO STUDENT_SKILL VALUES(2, 2);
+INSERT INTO STUDENT_SKILL VALUES(3, 1);
+INSERT INTO STUDENT_SKILL VALUES(3, 4);
+
+SELECT * FROM STUDENT_SKILL;
+
+SELECT NAME FROM SKILL WHERE ID IN(SELECT SKILL_ID FROM STUDENT_SKILL WHERE STUDENT_ID =
+(SELECT ID FROM STUDENT WHERE FIRST_NAME = 'MURALI'));
+
+SELECT FIRST_NAME FROM STUDENT WHERE ID IN
+(SELECT STUDENT_ID FROM STUDENT_SKILL WHERE SKILL_ID =
+(SELECT ID FROM SKILL WHERE NAME = 'C'));
+
+SELECT * FROM STUDENT, STUDENT_SKILL, SKILL WHERE
+STUDENT.ID = STUDENT_SKILL.STUDENT_ID AND STUDENT_SKILL.SKILL_ID = SKILL.ID;
+
+SELECT * FROM STUDENT S INNER JOIN STUDENT_SKILL SS ON
+S.ID = SS.STUDENT_ID INNER JOIN SKILL SK ON SS.SKILL_ID = SK.ID;
+
+SELECT * FROM STUDENT S LEFT OUTER JOIN STUDENT_SKILL SS ON
+S.ID = SS.STUDENT_ID LEFT OUTER JOIN SKILL SK ON SS.SKILL_ID = SK.ID;
+
+SELECT * FROM STUDENT S RIGHT OUTER JOIN STUDENT_SKILL SS ON
+S.ID = SS.STUDENT_ID RIGHT OUTER JOIN SKILL SK ON SS.SKILL_ID = SK.ID;
+
+//TIME STAMP
+
+MM	==>	Month	(01-12)
+MON	==>	Month in the abrrivated (JAN, FEB, ...)
+MONTH	==>	Name of the Month
+YY	==>	Year (14, 15)
+YYYY	==>	Year (2014, 2015)
+DD	==>	Day of the month.
+HH24	==>	Hour of the day(0-23)
+HH12	==>	Hour of the day(1-12)
+HH	==>	Hour of the day(1-12)
+
+AM, PM		==>	|
+A.M, P.M	==>	|	Meridian Indicator
+
+MI		==>	Minute (0-59)
+SS		==>	Second(0-59)
+FF		==>	Milliseconds (0-999)
+note: all the above letters are case in sensitive
+--------------------------------------------
+
+
+
+create table t1(sno number, name varchar2(90), dob date, doj timestamp);
+
+insert into t1 values(1, 'abc', sysdate, sysdate);
+insert into t1 values(2, 'xyz', to_date('1990/12/25', 'YYYY/MM/DD'),
+                                to_date('2014/03/25', 'YYYY/MM/DD'));
+insert into t1 values(3, 'xyz', to_date('1990-12-25', 'YYYY-MM-DD'),
+                                to_date('2014-23-05', 'YYYY-DD-MM'));
+insert into t1 values(4, 'xyz', to_date('19901225', 'YYYYMMDD'),
+                                to_date('20142305', 'YYYYDDMM'));
+
+
+insert into t1 values(5, 'xyz', to_date('1990-JAN-25', 'YYYY-MON-DD'),
+                                to_date('2014-23-JUL', 'YYYY-DD-MON'));
+insert into t1 values(6, 'xyz', to_date('1990-JULY-25', 'YYYY-MONTH-DD'),
+                                to_date('2014-23-MARCH', 'YYYY-DD-MONTH'));
+insert into t1 values(7, 'xyz', '31-MAR-98','22-APR-14');  //default DD-MON-YY
+
+
+
+
+
+
+
+
+insert into t1 values(8, 'xyz', to_date('1998/05/20:13:25:48','YYYY/MM/DD:HH24:MI:SS'),
+                                to_date('2013/25/10:03:25:48AM','YYYY/DD/MM:HH:MI:SSAM'));
+insert into t1 values(9, 'xyz', to_date('1998/05/20:10:25:48PM','YYYY/MM/DD:HH12:MI:SSPM'),
+                                to_date('2013/25/10:03:25:48AM','YYYY/DD/MM:HH:MI:SSAM'));
+
+
+
+
+
+insert into t1 values(10, 'xyz', to_date('1998/05/20:10:25:48PM','YYYY/MM/DD:HH12:MI:SSPM'),
+                                to_timestamp('2013/25/10:03:25:48AM','YYYY/DD/MM:HH:MI:SSAM'));
+insert into t1 values(11, 'xyz', to_date('1990-JULY-25', 'YYYY-MONTH-DD'),
+                                to_timestamp('2014-23-MARCH', 'YYYY-DD-MONTH'));
+insert into t1 values(12, 'xyz', to_date('1990.JULY.25', 'YYYY.MONTH.DD'),
+                                to_timestamp('2014 23 MARCH', 'YYYY DD MONTH'));
+
+
+
+
+
+
+
+
+
+
+
+
+insert into t1 values(13, 'xyz', to_date('1998/05/20-10-25-48PM','YYYY/MM/DD-HH12-MI-SSPM'),
+                                to_timestamp('2013/25/10.03.25.48AM','YYYY/DD/MM.HH.MI.SSAM'));
+insert into t1 values(14, 'xyz', to_date('1998/05/20-10-25-48PM','YYYY/MM/DD-HH12-MI-SSPM'),
+                                to_timestamp('2013/25/10.03.25.48.999AM','YYYY/DD/MM.HH.MI.SS.FF.AM'));
+
+insert into t1 values(2, 'xyz', to_date('1998/05/20-10-25-48.550PM','YYYY/MM/DD-HH12-MI-SS.FFPM'),
+                  to_timestamp('2013/25/10.03.25.48.520AM','YYYY/DD/MM.HH.MI.SS.FF.AM'));                                
+// ERROR . to_date wont support milliseconds.
+
+select * from t1;  // observe the dafault date out put and time stamp output.
+select to_char(dob, 'YYYY/MM/DD') as dob, 
+       to_char(doj, 'YYYY/MM/DD') as doj from t1;
+select to_char(dob ,'YYYY/MM/DD-HH12-MI-SSPM') as dob,
+       to_char(doj,'YYYY/DD/MM.HH.MI.SSAM') as doj from t1;
+select to_char(dob, 'YYYY-MONTH-DD') as dob,
+       to_char(doj, 'YYYY-DD-MONTH') as doj from t1;
+
+
+
+
+
+
+
+
+
+select * from t1 where dob > doj;
+select * from t1 where doj > dob;
+select * from t1 where dob > '25-DEC-90';
+select * from t1 where dob BETWEEN '25-DEC-90' AND '20-MAR-99';
+select * from t1 where dob = to_date('1990/12/25', 'YYYY/MM/DD');
+select * from t1 where dob > to_date('1990/12/25', 'YYYY/MM/DD');
+select * from t1 where dob between 
+to_date('1990/01/01', 'YYYY/MM/DD') and 
+to_date('2000/01/01', 'YYYY/MM/DD');
+
+create table t2(sno int, name varchar(90), sal int, dept varchar(90));
+insert into t2 values(1, 'ramu', 20000, 'sw');
+insert into t2 values(2, 'manu', 30000, 'sw');
+insert into t2 values(3, 'pavan', 25000, 'sw');
+insert into t2 values(4, 'kiran', 40000, 'hw');
+insert into t2 values(5, 'naveen', 35000, 'hw');
+insert into t2 values(6, 'chenna', 38000, 'hw');
+
+select * from t2;
+select * from t2 order by dept;
+select dept, count(*) as total_emp from t2 group by dept;
+select dept, sum(sal) from t2 group by dept;
+select dept, max(sal) from t2 group by dept;
+select dept, min(sal) from t2 group by dept;
+select dept, avg(sal) from t2 group by dept;
+
+
+
+
+
+
+
+
+
+
+----------
+CREATE TABLE EMP(ID INT, NAME VARCHAR(90), DOB DATE);
+INSERT INTO EMP VALUES(1, 'RAMU', '12-JAN-92');
+INSERT INTO EMP VALUES(2, 'MANU', '12-FEB-92');
+INSERT INTO EMP VALUES(3, 'VIJAY', '15-JAN-92');
+INSERT INTO EMP VALUES(4, 'MANJU', '20-JAN-92');
+INSERT INTO EMP VALUES(5, 'MANOJ', '15-NOV-94');
+INSERT INTO EMP VALUES(6, 'NAVEEN', '22-AUG-91');
+
+
+INSERT INTO EMP VALUES(7, 'NARESH', TO_DATE('12-JAN-92 8.30', 'DD-MON-YY HH.MI'));
+INSERT INTO EMP VALUES(8, 'NARAYANA', TO_DATE('12-DEC-95 18.30:45', 'DD-MON-YY HH24.MI:SS'));
+INSERT INTO EMP VALUES(9, 'PAVAN', TO_DATE('30-DEC-92 5.30 AM : 45', 'DD-MON-YY HH.MI AM : SS'));
+INSERT INTO EMP VALUES(10, 'PRAVEEN', TO_DATE('30-DEC-92 5.30 PM : 45', 'DD-MON-YY HH.MI PM : SS'));
+INSERT INTO EMP VALUES(11, 'PRAVEEN', TO_DATE('20-AUGUST-92 5.30 PM : 45', 'DD-MONTH-YY HH.MI PM : SS'));
+INSERT INTO EMP VALUES(12, 'SWATHI', TO_DATE('20-JULY-92 7.30 PM : 45', 'DD-MONTH-YY HH.MI PM : SS'));
+
+
+
+
+
+SELECT * FROM EMP;
+SELECT NAME, TO_CHAR(DOB, 'DD') AS DAY FROM EMP;
+SELECT NAME, TO_CHAR(DOB, 'MON') AS MONTH FROM EMP;
+SELECT NAME, TO_CHAR(DOB, 'MONTH') AS MONTH FROM EMP;
+SELECT NAME, TO_CHAR(DOB, 'MM') AS MONTH FROM EMP;
+SELECT NAME, TO_CHAR(DOB, 'MONTH') AS MONTH FROM EMP WHERE TO_CHAR(DOB, 'DD') > 15;
+SELECT NAME, TO_CHAR(DOB, 'MONTH') AS MONTH FROM EMP WHERE TO_CHAR(DOB, 'DD') <= 15;
+SELECT NAME, TO_CHAR(DOB, 'MONTH') AS MONTH FROM EMP WHERE TO_CHAR(DOB, 'MM') > 5;
+SELECT NAME, TO_CHAR(DOB, 'MONTH') AS MONTH FROM EMP WHERE TO_CHAR(DOB, 'MM') <= 5;
+SELECT NAME, TO_CHAR(DOB, 'MONTH') AS MONTH FROM EMP WHERE TO_CHAR(DOB, 'MON') = 'JAN';
+
+
+SELECT NAME, TO_CHAR(DOB, 'MONTH') AS MONTH FROM EMP WHERE 
+						TO_CHAR(DOB, 'MONTH') LIKE '%RY%';
+
+
+
+
+
+SELECT NAME, TO_CHAR(DOB, 'HH') AS HOUR FROM EMP;
+SELECT NAME, TO_CHAR(DOB, 'HH24') AS HOUR FROM EMP;
+SELECT NAME, TO_CHAR(DOB, 'HH12') AS HOUR FROM EMP;
+SELECT NAME, TO_CHAR(DOB, 'HH AM') AS HOUR FROM EMP;
+SELECT NAME, TO_CHAR(DOB, 'HH PM') AS HOUR FROM EMP;
+SELECT NAME, TO_CHAR(DOB, 'HH AM') HOUR FROM EMP WHERE TO_CHAR(DOB, 'HH24') > 10;
+SELECT NAME, TO_CHAR(DOB, 'HH AM') HOUR FROM EMP WHERE TO_CHAR(DOB, 'HH24')  < 7;
+
+
+SELECT NAME, TO_CHAR(DOB, 'HH AM') HOUR FROM EMP WHERE TO_CHAR(DOB, 'HH AM')  LIKE '%PM%';
+SELECT NAME, TO_CHAR(DOB, 'YY') YEAR FROM EMP;
+SELECT NAME, TO_CHAR(DOB, 'YYYY') YEAR FROM EMP;
+SELECT NAME, TO_CHAR(DOB, 'YY') YEAR FROM EMP  WHERE TO_CHAR(DOB, 'YY')  < 93;
+SELECT NAME, TO_CHAR(DOB, 'YY') YEAR FROM EMP  WHERE TO_CHAR(DOB, 'YY')  >= 95;
+SELECT NAME, TO_CHAR(DOB, 'YY') YEAR FROM EMP  WHERE TO_CHAR(DOB, 'YY')  BETWEEN 92 AND 94;
+SELECT NAME FROM EMP  WHERE TO_CHAR(DOB, 'DD.MM.YY') = '12.01.92';
+SELECT NAME FROM EMP  WHERE TO_CHAR(DOB, 'DD.MM.YY') > '12.01.92';
+SELECT NAME FROM EMP  WHERE TO_CHAR(DOB, 'DD-MM-YY') = '12-01-92';
+
+
+
+
+
+
 
 
 
