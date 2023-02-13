@@ -997,7 +997,9 @@ SELECT NAME FROM EMP  WHERE TO_CHAR(DOB, 'DD.MM.YY') = '12.01.92';
 SELECT NAME FROM EMP  WHERE TO_CHAR(DOB, 'DD.MM.YY') > '12.01.92';
 SELECT NAME FROM EMP  WHERE TO_CHAR(DOB, 'DD-MM-YY') = '12-01-92';
 
+
 INF:
+----
 
 
 employee
@@ -1009,9 +1011,6 @@ sno	name	age	skills
 3	mohan	25	C, C++, Java
 4	pavan	77	C, Oracle
 
-
-
-
 employee
 --------
 
@@ -1022,9 +1021,17 @@ sno	name	age
 3	mohan	25	
 4	pavan	77	
 
+skill_table
+------
+C
+C++
+java
+oracle
+
 
 employee_skill
 --------------
+
 emp_sno		skill
 -------		-----
 1		C
@@ -1056,6 +1063,8 @@ TRAINER
 t_id	name	age
 ----	----	---
 1	Manu	28
+1	Manu	28
+2	Ramu	38
 2	Ramu	38
 
 
