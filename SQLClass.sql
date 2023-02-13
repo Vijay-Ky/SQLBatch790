@@ -763,26 +763,37 @@ A.M, P.M	==>	|	Meridian Indicator
 MI		==>	Minute (0-59)
 SS		==>	Second(0-59)
 FF		==>	Milliseconds (0-999)
-note: all the above letters are case in sensitive
+note: all the above letters are case in-sensitive
 --------------------------------------------
 
 
 
 create table t1(sno number, name varchar2(90), dob date, doj timestamp);
 
+desc t1;
+
 insert into t1 values(1, 'abc', sysdate, sysdate);
+
+select * from t1;
+
 insert into t1 values(2, 'xyz', to_date('1990/12/25', 'YYYY/MM/DD'),
                                 to_date('2014/03/25', 'YYYY/MM/DD'));
+                                
 insert into t1 values(3, 'xyz', to_date('1990-12-25', 'YYYY-MM-DD'),
                                 to_date('2014-23-05', 'YYYY-DD-MM'));
+                                
+                                
 insert into t1 values(4, 'xyz', to_date('19901225', 'YYYYMMDD'),
                                 to_date('20142305', 'YYYYDDMM'));
 
-
+select * from t1;
 insert into t1 values(5, 'xyz', to_date('1990-JAN-25', 'YYYY-MON-DD'),
                                 to_date('2014-23-JUL', 'YYYY-DD-MON'));
+                                
 insert into t1 values(6, 'xyz', to_date('1990-JULY-25', 'YYYY-MONTH-DD'),
                                 to_date('2014-23-MARCH', 'YYYY-DD-MONTH'));
+                                
+                                
 insert into t1 values(7, 'xyz', '31-MAR-98','22-APR-14');  //default DD-MON-YY
 
 
@@ -794,6 +805,8 @@ insert into t1 values(7, 'xyz', '31-MAR-98','22-APR-14');  //default DD-MON-YY
 
 insert into t1 values(8, 'xyz', to_date('1998/05/20:13:25:48','YYYY/MM/DD:HH24:MI:SS'),
                                 to_date('2013/25/10:03:25:48AM','YYYY/DD/MM:HH:MI:SSAM'));
+                                
+select * from t1;                 
 insert into t1 values(9, 'xyz', to_date('1998/05/20:10:25:48PM','YYYY/MM/DD:HH12:MI:SSPM'),
                                 to_date('2013/25/10:03:25:48AM','YYYY/DD/MM:HH:MI:SSAM'));
 
@@ -803,11 +816,14 @@ insert into t1 values(9, 'xyz', to_date('1998/05/20:10:25:48PM','YYYY/MM/DD:HH12
 
 insert into t1 values(10, 'xyz', to_date('1998/05/20:10:25:48PM','YYYY/MM/DD:HH12:MI:SSPM'),
                                 to_timestamp('2013/25/10:03:25:48AM','YYYY/DD/MM:HH:MI:SSAM'));
+select * from t1;                
 insert into t1 values(11, 'xyz', to_date('1990-JULY-25', 'YYYY-MONTH-DD'),
                                 to_timestamp('2014-23-MARCH', 'YYYY-DD-MONTH'));
+                                
 insert into t1 values(12, 'xyz', to_date('1990.JULY.25', 'YYYY.MONTH.DD'),
                                 to_timestamp('2014 23 MARCH', 'YYYY DD MONTH'));
 
+select * from t1;
 
 
 
@@ -821,18 +837,27 @@ insert into t1 values(12, 'xyz', to_date('1990.JULY.25', 'YYYY.MONTH.DD'),
 
 insert into t1 values(13, 'xyz', to_date('1998/05/20-10-25-48PM','YYYY/MM/DD-HH12-MI-SSPM'),
                                 to_timestamp('2013/25/10.03.25.48AM','YYYY/DD/MM.HH.MI.SSAM'));
+                                
+select * from t1;                   
 insert into t1 values(14, 'xyz', to_date('1998/05/20-10-25-48PM','YYYY/MM/DD-HH12-MI-SSPM'),
                                 to_timestamp('2013/25/10.03.25.48.999AM','YYYY/DD/MM.HH.MI.SS.FF.AM'));
+
+select * from t1;
 
 insert into t1 values(2, 'xyz', to_date('1998/05/20-10-25-48.550PM','YYYY/MM/DD-HH12-MI-SS.FFPM'),
                   to_timestamp('2013/25/10.03.25.48.520AM','YYYY/DD/MM.HH.MI.SS.FF.AM'));                                
 // ERROR . to_date wont support milliseconds.
 
 select * from t1;  // observe the dafault date out put and time stamp output.
+
 select to_char(dob, 'YYYY/MM/DD') as dob, 
        to_char(doj, 'YYYY/MM/DD') as doj from t1;
+       
+       
 select to_char(dob ,'YYYY/MM/DD-HH12-MI-SSPM') as dob,
        to_char(doj,'YYYY/DD/MM.HH.MI.SSAM') as doj from t1;
+       
+       
 select to_char(dob, 'YYYY-MONTH-DD') as dob,
        to_char(doj, 'YYYY-DD-MONTH') as doj from t1;
 
@@ -845,16 +870,28 @@ select to_char(dob, 'YYYY-MONTH-DD') as dob,
 
 
 select * from t1 where dob > doj;
+
+select dob, doj from t1;
+
+
+
 select * from t1 where doj > dob;
+
+
 select * from t1 where dob > '25-DEC-90';
+
+
 select * from t1 where dob BETWEEN '25-DEC-90' AND '20-MAR-99';
 select * from t1 where dob = to_date('1990/12/25', 'YYYY/MM/DD');
 select * from t1 where dob > to_date('1990/12/25', 'YYYY/MM/DD');
+
 select * from t1 where dob between 
 to_date('1990/01/01', 'YYYY/MM/DD') and 
 to_date('2000/01/01', 'YYYY/MM/DD');
 
+
 create table t2(sno int, name varchar(90), sal int, dept varchar(90));
+
 insert into t2 values(1, 'ramu', 20000, 'sw');
 insert into t2 values(2, 'manu', 30000, 'sw');
 insert into t2 values(3, 'pavan', 25000, 'sw');
@@ -863,10 +900,18 @@ insert into t2 values(5, 'naveen', 35000, 'hw');
 insert into t2 values(6, 'chenna', 38000, 'hw');
 
 select * from t2;
+
+
 select * from t2 order by dept;
+
+select * from t2 order by dept desc;
+
 select dept, count(*) as total_emp from t2 group by dept;
+
 select dept, sum(sal) from t2 group by dept;
+
 select dept, max(sal) from t2 group by dept;
+
 select dept, min(sal) from t2 group by dept;
 select dept, avg(sal) from t2 group by dept;
 
@@ -901,15 +946,23 @@ INSERT INTO EMP VALUES(12, 'SWATHI', TO_DATE('20-JULY-92 7.30 PM : 45', 'DD-MONT
 
 
 SELECT * FROM EMP;
-SELECT NAME, TO_CHAR(DOB, 'DD') AS DAY FROM EMP;
+
+SELECT NAME, TO_CHAR(DOB, 'DD') AS DAY FROM EMP WHERE TO_CHAR(DOB, 'DD') > 15;
 SELECT NAME, TO_CHAR(DOB, 'MON') AS MONTH FROM EMP;
 SELECT NAME, TO_CHAR(DOB, 'MONTH') AS MONTH FROM EMP;
 SELECT NAME, TO_CHAR(DOB, 'MM') AS MONTH FROM EMP;
-SELECT NAME, TO_CHAR(DOB, 'MONTH') AS MONTH FROM EMP WHERE TO_CHAR(DOB, 'DD') > 15;
-SELECT NAME, TO_CHAR(DOB, 'MONTH') AS MONTH FROM EMP WHERE TO_CHAR(DOB, 'DD') <= 15;
-SELECT NAME, TO_CHAR(DOB, 'MONTH') AS MONTH FROM EMP WHERE TO_CHAR(DOB, 'MM') > 5;
-SELECT NAME, TO_CHAR(DOB, 'MONTH') AS MONTH FROM EMP WHERE TO_CHAR(DOB, 'MM') <= 5;
-SELECT NAME, TO_CHAR(DOB, 'MONTH') AS MONTH FROM EMP WHERE TO_CHAR(DOB, 'MON') = 'JAN';
+
+select * from emp;
+
+SELECT DOB, NAME, TO_CHAR(DOB, 'MONTH') AS MONTH FROM EMP WHERE TO_CHAR(DOB, 'DD') > 15;
+
+SELECT DOB, NAME, TO_CHAR(DOB, 'MONTH') AS MONTH FROM EMP WHERE TO_CHAR(DOB, 'DD') <= 15;
+
+SELECT DOB, NAME, TO_CHAR(DOB, 'MONTH') AS MONTH FROM EMP WHERE TO_CHAR(DOB, 'MM') > 5;
+
+SELECT DOB, NAME, TO_CHAR(DOB, 'MONTH') AS MONTH FROM EMP WHERE TO_CHAR(DOB, 'MM') <= 5;
+
+SELECT DOB, NAME, TO_CHAR(DOB, 'MONTH') AS MONTH FROM EMP WHERE TO_CHAR(DOB, 'MON') = 'JAN';
 
 
 SELECT NAME, TO_CHAR(DOB, 'MONTH') AS MONTH FROM EMP WHERE 
@@ -919,16 +972,22 @@ SELECT NAME, TO_CHAR(DOB, 'MONTH') AS MONTH FROM EMP WHERE
 
 
 
-SELECT NAME, TO_CHAR(DOB, 'HH') AS HOUR FROM EMP;
-SELECT NAME, TO_CHAR(DOB, 'HH24') AS HOUR FROM EMP;
+SELECT DOB, NAME, TO_CHAR(DOB, 'HH') AS HOUR FROM EMP;
+
+SELECT DOB, NAME, TO_CHAR(DOB, 'HH24') AS HOUR FROM EMP;
+
 SELECT NAME, TO_CHAR(DOB, 'HH12') AS HOUR FROM EMP;
+
 SELECT NAME, TO_CHAR(DOB, 'HH AM') AS HOUR FROM EMP;
 SELECT NAME, TO_CHAR(DOB, 'HH PM') AS HOUR FROM EMP;
-SELECT NAME, TO_CHAR(DOB, 'HH AM') HOUR FROM EMP WHERE TO_CHAR(DOB, 'HH24') > 10;
+SELECT DOB, NAME, TO_CHAR(DOB, 'HH AM') HOUR FROM EMP WHERE TO_CHAR(DOB, 'HH24') > 10;
 SELECT NAME, TO_CHAR(DOB, 'HH AM') HOUR FROM EMP WHERE TO_CHAR(DOB, 'HH24')  < 7;
 
 
-SELECT NAME, TO_CHAR(DOB, 'HH AM') HOUR FROM EMP WHERE TO_CHAR(DOB, 'HH AM')  LIKE '%PM%';
+SELECT DOB, NAME, TO_CHAR(DOB, 'HH PM') HOUR FROM EMP WHERE TO_CHAR(DOB, 'HH PM')  LIKE '%AM%';
+
+SELECT DOB, NAME, TO_CHAR(DOB, 'HH AM') HOUR FROM EMP;
+
 SELECT NAME, TO_CHAR(DOB, 'YY') YEAR FROM EMP;
 SELECT NAME, TO_CHAR(DOB, 'YYYY') YEAR FROM EMP;
 SELECT NAME, TO_CHAR(DOB, 'YY') YEAR FROM EMP  WHERE TO_CHAR(DOB, 'YY')  < 93;
@@ -937,6 +996,116 @@ SELECT NAME, TO_CHAR(DOB, 'YY') YEAR FROM EMP  WHERE TO_CHAR(DOB, 'YY')  BETWEEN
 SELECT NAME FROM EMP  WHERE TO_CHAR(DOB, 'DD.MM.YY') = '12.01.92';
 SELECT NAME FROM EMP  WHERE TO_CHAR(DOB, 'DD.MM.YY') > '12.01.92';
 SELECT NAME FROM EMP  WHERE TO_CHAR(DOB, 'DD-MM-YY') = '12-01-92';
+
+INF:
+
+
+employee
+--------
+sno	name	age	skills
+---	----	---	------
+1	ramu	22	C, C++
+2	manu	23	C, Java
+3	mohan	25	C, C++, Java
+4	pavan	77	C, Oracle
+
+
+
+
+employee
+--------
+
+sno	name	age	
+---	----	---	
+1	ramu	22	
+2	manu	23	
+3	mohan	25	
+4	pavan	77	
+
+
+employee_skill
+--------------
+emp_sno		skill
+-------		-----
+1		C
+1		C++
+2		C
+2		java
+3		C
+3		C++
+3		java
+4		C
+4		oracle
+
+
+
+2NF
+
+
+trainer
+-------
+t_id		Name		age		subject
+----		----		---		-------
+1		manu		28		Maths
+1		manu		28		Physics
+2		Ramu		38		Maths
+2		Ramu		38		Physics
+
+TRAINER
+-------
+t_id	name	age
+----	----	---
+1	Manu	28
+2	Ramu	38
+
+
+TRAINER_SUBJECT
+---------------
+t_id	subject
+----	-------
+1	Maths
+1	Physics
+2	Maths
+2	Physics
+
+
+3nf
+
+CREATE TABLE CUSTOMERS(
+   CUST_ID       NUMBER NOT NULL PRIMARY KEY,
+   CUST_NAME     VARCHAR2 (20)      NOT NULL,
+   DOB           DATE,
+   STREET        VARCHAR2(200),
+   CITY          VARCHAR2(100),
+   STATE         VARCHAR2(100),
+   ZIP           VARCHAR2(12),
+   EMAIL_ID      VARCHAR2(256)
+);
+
+
+
+
+
+CREATE TABLE ADDRESS(
+   ZIP           VARCHAR2(12) PRIMARY KEY,
+   STREET        VARCHAR2(200),
+   CITY          VARCHAR2(100),
+   STATE         VARCHAR2(100)
+);
+
+
+
+CREATE TABLE CUSTOMERS(
+   CUST_ID       NUMBER              NOT NULL,
+   CUST_NAME     VARCHAR2 (20)      NOT NULL,
+   DOB           DATE,
+   ZIP           VARCHAR2(12) UNIQUE,
+   EMAIL_ID      VARCHAR2(256),
+   CONSTRAINT CS_FK1 FOREIGN KEY (ZIP) REFERENCES ADDRESS(ZIP)
+);
+
+
+
 
 
 
